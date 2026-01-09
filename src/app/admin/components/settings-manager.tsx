@@ -136,7 +136,7 @@ export function SettingsManager({ initialSettings }: { initialSettings: Settings
             <div className="space-y-4">
               <Label className="flex items-center gap-2">
                 <Palette className="h-4 w-4" />
-                品牌主色项项项项项项项项项项项项项项项项项项项项项项项项项项项(太长省略)。
+                品牌主色
               </Label>
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                 {THEMES.map((t) => (
