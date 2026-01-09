@@ -1,0 +1,88 @@
+{
+  "settings": {
+    "title": "hello",
+    "logo": "https://pic1.imgdb.cn/item/6817ad0b58cb8da5c8dc6f76.png",
+    "copyright": "© 2025 英语全科启蒙. All Rights Reserved.",
+    "searchEnabled": true
+  },
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "常用工具",
+      "links": [
+        {
+          "name": "Google",
+          "url": "https://google.com",
+          "description": "全球最大的搜索引擎",
+          "logoUrl": "",
+          "id": "link-1-1",
+          "categoryId": "cat-1"
+        },
+        {
+          "id": "link-1-2",
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "代码托管与协作平台",
+          "categoryId": "cat-1"
+        },
+        {
+          "id": "link-1-3",
+          "name": "Vercel",
+          "url": "https://vercel.com",
+          "description": "前端应用部署平台",
+          "categoryId": "cat-1"
+        },
+        {
+          "id": "link-1-4",
+          "name": "ChatGPT",
+          "url": "https://chat.openai.com",
+          "description": "人工智能聊天机器人",
+          "categoryId": "cat-1"
+        },
+        {
+          "name": "英语",
+          "url": "https://www.douyin.com/",
+          "description": "专业英语网站",
+          "logoUrl": "https://pic1.imgdb.cn/item/6817ad0b58cb8da5c8dc6f76.png",
+          "id": "link-1758865346350",
+          "categoryId": "cat-1"
+        }
+      ]
+    },
+    {
+      "id": "cat-2",
+      "name": "设计资源",
+      "links": [
+        {
+          "id": "link-2-1",
+          "name": "Figma",
+          "url": "https://figma.com",
+          "description": "协作式界面设计工具",
+          "categoryId": "cat-2"
+        },
+        {
+          "id": "link-2-2",
+          "name": "Dribbble",
+          "url": "https://dribbble.com",
+          "description": "设计师作品分享平台",
+          "categoryId": "cat-2"
+        },
+        {
+          "id": "link-2-3",
+          "name": "Unsplash",
+          "url": "https://unsplash.com",
+          "description": "免费高质量图片库",
+          "categoryId": "cat-2"
+        },
+        {
+          "id": "link-2-4",
+          "name": "Icons8",
+          "url": "https://icons8.com",
+          "description": "海量免费图标和插图",
+          "categoryId": "cat-2"
+        }
+      ]
+    }
+  ],
+  "adminPasswordHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+}
