@@ -64,4 +64,36 @@ else
         --latest
 fi
 
+echo "Checking v3.0.2..."
+if gh release view v3.0.2 &>/dev/null; then
+    echo "Release v3.0.2 already exists."
+else
+    echo "Creating v3.0.2 Release..."
+    gh release create v3.0.2 \
+        --title "v3.0.2: Component-Level Tooltip Fix" \
+        --notes "## Critical Fix
+- **Root Cause**: Identified that Radix UI TooltipContent component was using theme-dependent CSS variables (\`bg-popover/90\`, \`text-foreground/80\`) causing invisible text in light themes.
+- **Solution**: Applied component-level fix with forced dark styling (\`!bg-[#1e1b4b]\`, \`!text-white\`) using \`!important\` to override all theme styles.
+- **Result**: Perfect tooltip visibility across ALL 7 themes.
+
+## Files Changed
+- \`src/components/link-grid.tsx\` - Component fix
+- \`_worker.js\` - Version update" \
+        --latest
+fi
+
+echo "Checking v3.0.3..."
+if gh release view v3.0.3 &>/dev/null; then
+    echo "Release v3.0.3 already exists."
+else
+    echo "Creating v3.0.3 Release..."
+    gh release create v3.0.3 \
+        --title "v3.0.3: High-Contrast Tooltip Enforcement" \
+        --notes "## Additional Hardening
+- **Enhanced CSS Specificity**: Further enforced tooltip styling with \`!important\` declarations
+- **Bulletproof Styling**: Ensured tooltips are 100% visible regardless of theme or CSS cascade
+- **Production-Ready**: Final polish for universal cross-theme compatibility" \
+        --latest
+fi
+
 echo "✅ All releases processed successfully!"

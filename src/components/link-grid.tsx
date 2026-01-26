@@ -142,9 +142,9 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
                             </div>
                           </a>
                         </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-[220px] bg-popover/90 backdrop-blur-md border-primary/20 p-3 shadow-xl z-50">
-                          <p className="font-bold text-sm mb-1 text-primary">{link.name}</p>
-                          <p className="text-xs text-foreground/80 leading-relaxed break-words">{link.description}</p>
+                        <TooltipContent side="right" className="max-w-[220px] !bg-[#1e1b4b] backdrop-blur-md !border-white/20 p-3 shadow-xl z-50">
+                          <p className="font-bold text-sm mb-1 !text-white">{link.name}</p>
+                          <p className="text-xs !text-white/90 leading-relaxed break-words">{link.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

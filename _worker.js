@@ -1,8 +1,9 @@
 /**
- * 英语全科启蒙导航 - Cloudflare Worker v3.0.3
+ * 英语全科启蒙导航 - Cloudflare Worker v3.0.2
  * 特性：7 儿童友好主题 (薄荷/薰衣草/柠檬/棉花糖/海洋/银河/极致纯黑)
  *       大号卡片 Logo (64px)、Tooltip 布局偏移、聚光灯聚焦、本地主题持久化
- *       v3.0.3 优化：修复浅色主题下 Tooltip 文字对比度问题 (使用 !important)
+ *       v3.0 优化：悬浮框文字显示优化 (通用暗色模式)
+ *       v3.0.2: 组件级修复确保所有主题下完美显示
  */
 
 export default {
@@ -204,14 +205,14 @@ const CSS_BUNDLE = `
     margin-right: 220px;
   }
 
-  /* Tooltip 样式 - v3.0.3 优化: 强制暗色模式以确保清晰度 */
+  /* Tooltip 样式 - v3.0 优化: 强制暗色模式以确保清晰度 */
   .card-tooltip {
     position: absolute;
     right: -210px;
     top: 0;
     width: 200px;
-    background: #1e1b4b !important; /* 强制使用深色背景 (银河主题色) */
-    color: #ffffff !important;      /* 强制白色文字 */
+    background: #1e1b4b; /* 强制使用深色背景 (银河主题色) */
+    color: #ffffff;      /* 强制白色文字 */
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;
     padding: 1rem;
@@ -222,13 +223,13 @@ const CSS_BUNDLE = `
     z-index: 50;
   }
   .card-tooltip h4 {
-    color: #fff !important;
+    color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
   }
   .card-tooltip p {
-    color: rgba(255,255,255,0.9) !important;
+    color: rgba(255,255,255,0.9);
     font-size: 0.875rem;
     line-height: 1.4;
   }
@@ -442,7 +443,7 @@ async function renderAdmin(ctx) {
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>系统管理后台 v3.0.3</title>
+    <title>系统管理后台 v3.0.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .sidebar-btn.active { background: #eff6ff; color: #2563eb; border-right: 4px solid #2563eb; }
@@ -455,7 +456,7 @@ async function renderAdmin(ctx) {
         <!-- Sidebar -->
         <aside class="w-72 bg-white border-r border-slate-200 p-8 flex flex-col pt-12">
             <h1 class="text-2xl font-black mb-2 tracking-tighter">DASHBOARD</h1>
-            <p class="text-xs text-slate-400 mb-12">v3.0.3 - 儿童友好版</p>
+            <p class="text-xs text-slate-400 mb-12">v3.0.2 - 儿童友好版</p>
             <nav class="space-y-4 flex-1">
                 <button onclick="switchTab('sets')" id="btn-sets" class="sidebar-btn active w-full text-left p-4 font-bold rounded-xl transition-all">🌐 基础设置</button>
                 <button onclick="switchTab('cats')" id="btn-cats" class="sidebar-btn w-full text-left p-4 font-bold rounded-xl transition-all">📦 分类与链接</button>
