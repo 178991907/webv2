@@ -51,4 +51,17 @@ else
         --latest
 fi
 
+echo "Checking v3.0.1..."
+if gh release view v3.0.1 &>/dev/null; then
+    echo "Release v3.0.1 already exists."
+else
+    echo "Creating v3.0.1 Release..."
+    gh release create v3.0.1 \
+        --title "v3.0.1: Hotfix for Vercel/Next.js Tooltips" \
+        --notes "## Hotfix
+- **CSS Fix**: Applied universal dark tooltip styles to globally deployed Next.js/Vercel versions (previously only applied to Worker).
+- Ensures consistent readability across all deployments." \
+        --latest
+fi
+
 echo "✅ All releases processed successfully!"

@@ -573,6 +573,43 @@ body {
 .link-grid-container:has(.group:hover) .group:not(:hover) .theme-card {
   transform: scale(0.95);
   opacity: 0.5;
-  filter: blur(1px) grayscale(30%);
+  /* Tooltip 样式 - v3.0 优化: 强制暗色模式以确保清晰度 */
   transition: all 0.4s ease;
+}
+
+/* Tooltip 样式 - v3.0 优化: 强制暗色模式以确保清晰度 */
+.card-tooltip {
+  position: absolute;
+  right: -210px;
+  top: 0;
+  width: 200px;
+  background: #1e1b4b;
+  /* 强制使用深色背景 (银河主题色) */
+  color: #ffffff;
+  /* 强制白色文字 */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+}
+
+.card-tooltip h4 {
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-tooltip p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.card-wrapper:hover .card-tooltip {
+  opacity: 1;
 }
