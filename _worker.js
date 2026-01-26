@@ -1,6 +1,7 @@
 /**
- * 英语全科启蒙导航 - Cloudflare Worker 究极对齐版
- * 特性：100% 原始功能移植，完整分类/链接 CRUD，物理排序，5外观+6配色，安全隔离。
+ * 英语全科启蒙导航 - Cloudflare Worker v2.0
+ * 特性：7 儿童友好主题 (薄荷/薰衣草/柠檬/棉花糖/海洋/银河/极致纯黑)
+ *       大号卡片 Logo (64px)、Tooltip 布局偏移、聚光灯聚焦、本地主题持久化
  */
 
 export default {
@@ -105,92 +106,273 @@ function renderLogin() {
 </html>`, { headers: { "Content-Type": "text/html;charset=UTF-8" } });
 }
 
-// --- 样式定义 (全量移植) ---
+// --- 样式定义 (v2.0 儿童友好主题) ---
 const CSS_BUNDLE = `
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;700;900&display=swap');
+
   :root {
-    --background: 0 0% 100%; --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%; --card-foreground: 240 10% 3.9%;
-    --border: 240 5.9% 90%; --primary: 221.2 83.2% 53.3%;
-    --radius: 1rem; --primary-foreground: 210 40% 98%;
+    /* 默认银河主题 */
+    --background: 265 48% 10%;
+    --foreground: 210 40% 98%;
+    --card: 265 48% 13%;
+    --card-foreground: 210 40% 98%;
+    --primary: 265 89% 78%;
+    --primary-foreground: 265 48% 10%;
+    --border: 265 48% 25%;
+    --radius: 1.5rem;
   }
-  .dark {
-    --background: 240 10% 3.9%; --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%; --card-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
+
+  /* 7 儿童友好主题 */
+  .mint {
+    --background: 200 60% 98%; --foreground: 218 23% 23%;
+    --card: 0 0% 100%; --card-foreground: 218 23% 23%;
+    --primary: 176 56% 55%; --primary-foreground: 0 0% 100%;
+    --border: 176 56% 90%;
   }
-  /* 配色方案 */
-  .theme-blue { --primary: 221.2 83.2% 53.3%; --primary-foreground: 210 40% 98%; }
-  .theme-green { --primary: 142.1 76.2% 36.3%; --primary-foreground: 355.7 100% 97.3%; }
-  .theme-purple { --primary: 262.1 83.3% 57.8%; --primary-foreground: 210 40% 98%; }
-  .theme-orange { --primary: 24.6 95% 53.1%; --primary-foreground: 60 9.1% 97.8%; }
-  .theme-pink { --primary: 346.8 77.2% 49.8%; --primary-foreground: 355.7 100% 97.3%; }
-  .theme-slate { --primary: 215.4 16.3% 46.9%; --primary-foreground: 210 40% 98%; }
+  .lavender {
+    --background: 255 100% 99%; --foreground: 247 17% 22%;
+    --card: 0 0% 100%; --card-foreground: 247 17% 22%;
+    --primary: 255 92% 76%; --primary-foreground: 255 40% 20%;
+    --border: 255 92% 92%;
+  }
+  .lemon {
+    --background: 45 100% 97%; --foreground: 30 35% 18%;
+    --card: 0 0% 100%; --card-foreground: 30 35% 18%;
+    --primary: 45 96% 64%; --primary-foreground: 30 40% 15%;
+    --border: 45 96% 90%;
+  }
+  .candy {
+    --background: 333 60% 98%; --foreground: 325 25% 23%;
+    --card: 0 0% 100%; --card-foreground: 325 25% 23%;
+    --primary: 329 81% 81%; --primary-foreground: 325 40% 20%;
+    --border: 329 81% 92%;
+  }
+  .ocean {
+    --background: 204 100% 97%; --foreground: 213 52% 25%;
+    --card: 0 0% 100%; --card-foreground: 213 52% 25%;
+    --primary: 214 100% 65%; --primary-foreground: 0 0% 100%;
+    --border: 214 100% 90%;
+  }
+  .galaxy {
+    --background: 265 48% 10%; --foreground: 210 40% 98%;
+    --card: 265 48% 13%; --card-foreground: 210 40% 98%;
+    --primary: 265 89% 78%; --primary-foreground: 265 48% 10%;
+    --border: 265 48% 25%;
+  }
+  .midnight {
+    --background: 0 0% 0%; --foreground: 210 40% 98%;
+    --card: 240 10% 4%; --card-foreground: 210 40% 98%;
+    --primary: 0 0% 100%; --primary-foreground: 0 0% 0%;
+    --border: 240 4% 16%;
+  }
 
-  /* 外观风格 */
-  .appearance-glass { background: radial-gradient(circle at 0% 0%, #1a1b26, #09090b) fixed; color: #fff; --card: 0 0% 100% / 0.03; --border: 0 0% 100% / 0.08; }
-  .appearance-glass .glass-card { backdrop-filter: blur(20px); background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-  .appearance-paper { background: #fdfaf3; color: #2c2c2c; --card: 0 0% 100%; --border: 35 20% 88%; }
-  .appearance-paper .glass-card { border: 1px solid #e2ddd0; box-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
-  .appearance-minimal { background: #fff; --radius: 0; --border: 240 5% 95%; }
-  .appearance-minimal .glass-card { border: none; border-bottom: 1px solid #eee; box-shadow: none; background: transparent; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    transition: background 0.4s ease, color 0.4s ease;
+  }
 
-  body { transition: background 0.4s ease; font-family: 'Inter', system-ui, sans-serif; }
   .font-caveat { font-family: 'Caveat', cursive; }
+
+  /* 卡片样式 */
+  .theme-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 聚光灯聚焦效果 */
+  .link-grid-container:has(.theme-card:hover) .theme-card:not(:hover) {
+    transform: scale(0.95);
+    opacity: 0.5;
+    filter: blur(1px) grayscale(30%);
+  }
+  .theme-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    z-index: 20;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+  }
+
+  /* 布局偏移 (为 Tooltip 留空间) */
+  .link-grid-container .card-wrapper {
+    transition: margin-right 0.3s ease;
+  }
+  .link-grid-container .card-wrapper:hover {
+    margin-right: 220px;
+  }
+
+  /* Tooltip 样式 */
+  .card-tooltip {
+    position: absolute;
+    right: -210px;
+    top: 0;
+    width: 200px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .card-wrapper:hover .card-tooltip {
+    opacity: 1;
+  }
+
+  /* Logo 容器 */
+  .logo-container {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #3b2667, #6b3fa0);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(107, 63, 160, 0.3);
+  }
+  .logo-inner {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .logo-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* 动画 */
   .animate-float { animation: float 4s ease-in-out infinite; }
-  @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+`;
+
+// --- 主题切换器 JS ---
+const THEME_SWITCHER_JS = `
+  const THEMES = [
+    { id: 'mint', name: '薄荷清新', color: '#4ECDC4' },
+    { id: 'lavender', name: '薰衣草梦幻', color: '#A78BFA' },
+    { id: 'lemon', name: '阳光柠檬派', color: '#FCD34D' },
+    { id: 'candy', name: '棉花糖乐园', color: '#F9A8D4' },
+    { id: 'ocean', name: '海洋探险', color: '#4C9BFF' },
+    { id: 'galaxy', name: '银河探索', color: '#1e1b4b' },
+    { id: 'midnight', name: '极致纯黑', color: '#000000' }
+  ];
+
+  function initTheme() {
+    const saved = localStorage.getItem('user-theme');
+    if (saved) {
+      document.documentElement.className = saved;
+    }
+  }
+
+  function switchTheme(themeId) {
+    document.documentElement.className = themeId;
+    localStorage.setItem('user-theme', themeId);
+    updateThemeUI();
+  }
+
+  function updateThemeUI() {
+    const current = document.documentElement.className || 'galaxy';
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.classList.toggle('ring-2', btn.dataset.theme === current);
+      btn.classList.toggle('ring-white', btn.dataset.theme === current);
+    });
+  }
+
+  function toggleThemeMenu() {
+    const menu = document.getElementById('themeMenu');
+    menu.classList.toggle('hidden');
+  }
+
+  initTheme();
 `;
 
 // --- 首页渲染 ---
 async function renderHome(ctx) {
     const sets = JSON.parse(await ctx.storage.get("settings") || "{}");
     const cats = JSON.parse(await ctx.storage.get("categories") || "[]");
+    const defaultTheme = sets.appearanceMode || 'galaxy';
 
     const html = `
 <!DOCTYPE html>
-<html lang="zh-CN" class="${sets.theme || 'theme-blue'} appearance-${sets.appearanceMode || 'light'}">
+<html lang="zh-CN" class="${defaultTheme}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${sets.title || '英语导航'}</title>
+    <title>${sets.title || '英语全科启蒙导航'}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>${CSS_BUNDLE}</style>
 </head>
-<body class="bg-[hsl(var(--background))] text-[hsl(var(--foreground))] min-h-screen">
-    <header class="pt-24 pb-16 text-center container mx-auto px-6 relative">
-        <a href="/admin" class="absolute top-10 right-10 p-4 bg-white/5 backdrop-blur-2xl rounded-full border border-black/5 hover:scale-110 active:scale-90 transition-all shadow-xl">⚙️</a>
-        ${sets.logo ? `<img src="${sets.logo}" class="h-32 mx-auto mb-10 animate-float object-contain drop-shadow-2xl">` : ''}
-        <h1 class="font-caveat text-8xl font-black bg-clip-text text-transparent bg-gradient-to-br from-[hsl(var(--primary))] to-pink-500 mb-4">${sets.title || '英语启蒙'}</h1>
-        <p class="text-slate-400 font-bold tracking-[0.5em] uppercase text-[10px] opacity-50">Discovery / Learning / Enlightenment</p>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="pt-16 pb-12 text-center container mx-auto px-6 relative">
+        <!-- Theme Switcher -->
+        <div class="absolute top-4 right-4 flex gap-2">
+            <button onclick="toggleThemeMenu()" class="p-3 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/20 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            </button>
+            <a href="/admin" class="p-3 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/20 transition-all">⚙️</a>
+        </div>
+
+        <!-- Theme Menu -->
+        <div id="themeMenu" class="hidden absolute top-16 right-4 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-4 z-50">
+            <p class="text-xs font-bold opacity-50 mb-3 uppercase tracking-wider">选择主题</p>
+            <div class="grid grid-cols-4 gap-2">
+                ${['mint', 'lavender', 'lemon', 'candy', 'ocean', 'galaxy', 'midnight'].map(t => `
+                    <button onclick="switchTheme('${t}')" data-theme="${t}" class="theme-btn w-10 h-10 rounded-xl transition-all" style="background: ${t === 'galaxy' ? '#1e1b4b' : t === 'midnight' ? '#000' : t === 'mint' ? '#4ECDC4' : t === 'lavender' ? '#A78BFA' : t === 'lemon' ? '#FCD34D' : t === 'candy' ? '#F9A8D4' : '#4C9BFF'}"></button>
+                `).join('')}
+            </div>
+        </div>
+
+        ${sets.logo ? `<img src="${sets.logo}" class="h-24 mx-auto mb-8 animate-float object-contain drop-shadow-2xl">` : ''}
+        <h1 class="font-caveat text-6xl md:text-8xl font-black bg-clip-text text-transparent bg-gradient-to-br from-[hsl(var(--primary))] to-pink-500 mb-4">${sets.title || '英语全科启蒙'}</h1>
+        <p class="text-sm opacity-50 font-bold tracking-[0.3em] uppercase">Welcome to All-Subject English Enlightenment</p>
     </header>
 
-    <main class="container mx-auto px-6 pb-40 max-w-7xl">
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 pb-32 max-w-7xl">
         ${sets.searchEnabled !== false ? `
-        <div class="max-w-2xl mx-auto mb-24 relative group">
-            <input type="text" id="searchInput" oninput="doSearch(this.value)" placeholder="发现精彩资源..." class="w-full h-18 px-10 rounded-[2rem] bg-[hsl(var(--card))] border-2 border-[hsl(var(--border))] shadow-2xl focus:border-[hsl(var(--primary))] outline-none transition-all text-xl font-medium">
-            <div class="absolute right-6 top-5 opacity-20 group-hover:opacity-100 transition-opacity">🔍</div>
+        <div class="max-w-2xl mx-auto mb-16 relative group">
+            <input type="text" id="searchInput" oninput="doSearch(this.value)" placeholder="发现精彩资源..." class="w-full h-16 px-8 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-xl focus:ring-2 focus:ring-[hsl(var(--primary))] outline-none transition-all text-lg">
+            <div class="absolute right-6 top-5 opacity-30">🔍</div>
         </div>` : ''}
 
-        <div id="contentGrid" class="space-y-32">
-            ${cats.sort((a, b) => a.sortOrder - b.sortOrder).map(cat => `
+        <div id="contentGrid" class="space-y-24">
+            ${cats.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)).map(cat => `
                 <section class="cat-section" data-name="${cat.name}">
-                    <div class="flex items-center gap-6 mb-12">
-                        <span class="h-12 w-2.5 bg-gradient-to-b from-[hsl(var(--primary))] to-transparent rounded-full"></span>
-                        <h2 class="text-5xl font-black tracking-tighter italic">${cat.name}</h2>
+                    <div class="flex items-center gap-4 mb-8">
+                        <span class="h-10 w-2 bg-gradient-to-b from-[hsl(var(--primary))] to-transparent rounded-full"></span>
+                        <h2 class="text-4xl font-black tracking-tight">${cat.name}</h2>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        ${cat.links.sort((a, b) => a.sortOrder - b.sortOrder).map(link => `
-                            <a href="${link.url}" target="_blank" class="link-card glass-card group p-8 rounded-[var(--radius)] border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] transition-all duration-700 hover:-translate-y-3" data-title="${link.name}" data-desc="${link.description}">
-                                <div class="flex items-center gap-5">
-                                    <div class="w-20 h-20 shrink-0 rounded-3xl bg-white p-2.5 shadow-2xl border border-black/5 overflow-hidden group-hover:rotate-6 transition-transform">
-                                        <img src="${link.logoUrl || 'https://via.placeholder.com/100'}" class="w-full h-full object-contain">
+                    <div class="link-grid-container flex flex-wrap gap-6">
+                        ${(cat.links || []).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)).map(link => `
+                            <div class="card-wrapper relative">
+                                <a href="${link.url}" target="_blank" class="theme-card link-card block p-6 w-[280px] hover:shadow-2xl" data-title="${link.name}" data-desc="${link.description}">
+                                    <div class="flex items-center gap-4">
+                                        <div class="logo-container shrink-0">
+                                            <div class="logo-inner">
+                                                <img src="${link.logoUrl || 'https://via.placeholder.com/64'}" alt="${link.name}">
+                                            </div>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-bold text-lg truncate mb-1">${link.name}</h3>
+                                            <p class="text-xs opacity-50 line-clamp-2">${link.description || ''}</p>
+                                        </div>
                                     </div>
-                                    <div class="min-w-0">
-                                        <h3 class="font-black text-2xl group-hover:text-[hsl(var(--primary))] transition-colors truncate mb-1">${link.name}</h3>
-                                        <p class="text-xs opacity-50 line-clamp-2 leading-relaxed font-medium">${link.description}</p>
-                                    </div>
+                                </a>
+                                <div class="card-tooltip">
+                                    <h4 class="font-bold mb-2">${link.name}</h4>
+                                    <p class="text-sm opacity-70">${link.description || '暂无描述'}</p>
                                 </div>
-                            </a>
+                            </div>
                         `).join('')}
                     </div>
                 </section>
@@ -198,54 +380,68 @@ async function renderHome(ctx) {
         </div>
     </main>
 
-    <footer class="py-24 border-t border-[hsl(var(--border))] text-center opacity-20">
-        <p class="text-sm font-black italic tracking-widest">${sets.copyright || '© 2025 DAO HANG'}</p>
+    <footer class="py-16 border-t border-[hsl(var(--border))] text-center opacity-30">
+        <p class="text-sm font-bold">${sets.copyright || '© 2025 英语全科启蒙'}</p>
     </footer>
 
     <script>
+        ${THEME_SWITCHER_JS}
+
         function doSearch(q) {
             const query = q.toLowerCase();
             document.querySelectorAll('.link-card').forEach(card => {
                 const text = (card.dataset.title + card.dataset.desc).toLowerCase();
                 const match = text.includes(query);
-                card.style.display = match ? 'block' : 'none';
-                card.classList.toggle('hidden', !match);
+                card.closest('.card-wrapper').style.display = match ? 'block' : 'none';
             });
             document.querySelectorAll('.cat-section').forEach(sec => {
-                const hasVisible = sec.querySelectorAll('.link-card:not(.hidden)').length > 0;
+                const hasVisible = sec.querySelectorAll('.card-wrapper[style*="block"], .card-wrapper:not([style])').length > 0;
                 sec.style.display = hasVisible ? 'block' : 'none';
             });
         }
+
+        // Update theme UI on load
+        setTimeout(updateThemeUI, 100);
     </script>
 </body>
 </html>`;
     return new Response(html, { headers: { "Content-Type": "text/html;charset=UTF-8" } });
 }
 
-// --- 管理后台 SPA ---
+// --- 管理后台 ---
 async function renderAdmin(ctx) {
     const settings = JSON.parse(await ctx.storage.get("settings") || "{}");
     const categories = JSON.parse(await ctx.storage.get("categories") || "[]");
+
+    const THEMES = [
+        { id: 'mint', name: '薄荷清新' },
+        { id: 'lavender', name: '薰衣草梦幻' },
+        { id: 'lemon', name: '阳光柠檬派' },
+        { id: 'candy', name: '棉花糖乐园' },
+        { id: 'ocean', name: '海洋探险' },
+        { id: 'galaxy', name: '银河探索' },
+        { id: 'midnight', name: '极致纯黑' }
+    ];
 
     const html = `
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>系统管理后台</title>
+    <title>系统管理后台 v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .sidebar-btn.active { background: #eff6ff; color: #2563eb; border-right: 4px solid #2563eb; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .cat-item.collapsed .cat-links { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside class="w-72 bg-white border-r border-slate-200 p-8 flex flex-col pt-12">
-            <h1 class="text-2xl font-black mb-12 tracking-tighter">DASHBOARD</h1>
+            <h1 class="text-2xl font-black mb-2 tracking-tighter">DASHBOARD</h1>
+            <p class="text-xs text-slate-400 mb-12">v2.0 - 儿童友好版</p>
             <nav class="space-y-4 flex-1">
                 <button onclick="switchTab('sets')" id="btn-sets" class="sidebar-btn active w-full text-left p-4 font-bold rounded-xl transition-all">🌐 基础设置</button>
                 <button onclick="switchTab('cats')" id="btn-cats" class="sidebar-btn w-full text-left p-4 font-bold rounded-xl transition-all">📦 分类与链接</button>
@@ -262,67 +458,41 @@ async function renderAdmin(ctx) {
                     <button onclick="saveGlobalSettings()" class="bg-blue-600 text-white font-black px-10 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all">立即保存</button>
                 </div>
                 <div class="grid gap-10">
-                  <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col gap-8">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">网站标题</label><input type="text" id="s-title" value="${settings.title || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none border-2 border-transparent focus:border-blue-200"></div>
-                        <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">Logo 地址</label><input type="text" id="s-logo" value="${settings.logo || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none"></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-8">
-                        <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">外观风格</label>
+                    <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col gap-8">
+                        <div class="grid grid-cols-2 gap-8">
+                            <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">网站标题</label><input type="text" id="s-title" value="${settings.title || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none border-2 border-transparent focus:border-blue-200"></div>
+                            <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">Logo 地址</label><input type="text" id="s-logo" value="${settings.logo || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none"></div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase mb-3">默认主题 (新用户)</label>
                             <select id="s-appearance" class="w-full bg-slate-50 p-5 rounded-2xl outline-none">
-                                <option value="light" ${settings.appearanceMode === 'light' ? 'selected' : ''}>系统亮色</option>
-                                <option value="dark" ${settings.appearanceMode === 'dark' ? 'selected' : ''}>系统暗色</option>
-                                <option value="glass" ${settings.appearanceMode === 'glass' ? 'selected' : ''}>玻璃拟态 (Glassmorphism)</option>
-                                <option value="paper" ${settings.appearanceMode === 'paper' ? 'selected' : ''}>柔和纸张 (Paper)</option>
-                                <option value="minimal" ${settings.appearanceMode === 'minimal' ? 'selected' : ''}>极简专业 (Minimal)</option>
+                                ${THEMES.map(t => `<option value="${t.id}" ${settings.appearanceMode === t.id ? 'selected' : ''}>${t.name}</option>`).join('')}
                             </select>
                         </div>
-                        <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">品牌配色</label>
-                            <select id="s-theme" class="w-full bg-slate-50 p-5 rounded-2xl outline-none">
-                                <option value="theme-blue" ${settings.theme === 'theme-blue' ? 'selected' : ''}>经典蓝</option>
-                                <option value="theme-green" ${settings.theme === 'theme-green' ? 'selected' : ''}>清新绿</option>
-                                <option value="theme-purple" ${settings.theme === 'theme-purple' ? 'selected' : ''}>极客紫</option>
-                                <option value="theme-orange" ${settings.theme === 'theme-orange' ? 'selected' : ''}>活力橙</option>
-                                <option value="theme-pink" ${settings.theme === 'theme-pink' ? 'selected' : ''}>樱花粉</option>
-                                <option value="theme-slate" ${settings.theme === 'theme-slate' ? 'selected' : ''}>深空灰</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">版权声明</label><input type="text" id="s-copy" value="${settings.copyright || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none"></div>
+                        <div class="flex items-center gap-4"><input type="checkbox" id="s-search" ${settings.searchEnabled !== false ? 'checked' : ''} class="w-6 h-6"><label for="s-search" class="font-bold">开启搜索功能</label></div>
                     </div>
-                    <div><label class="block text-xs font-black text-slate-400 uppercase mb-3">版权声明</label><input type="text" id="s-copy" value="${settings.copyright || ''}" class="w-full bg-slate-50 p-5 rounded-2xl outline-none"></div>
-                    <div class="flex items-center gap-4"><input type="checkbox" id="s-search" ${settings.searchEnabled !== false ? 'checked' : ''} class="w-6 h-6"><label for="s-search" class="font-bold">开启搜索功能</label></div>
-                  </div>
-                  <div class="bg-amber-50 p-10 rounded-[2.5rem] border border-amber-100 flex items-center justify-between">
-                      <div><h3 class="font-black text-amber-900 text-xl mb-1">数据同步</h3><p class="text-amber-700 text-sm">点击按钮从迁移 JSON 文件中恢复数据。</p></div>
-                      <button onclick="syncData()" class="bg-amber-600 text-white font-bold px-8 py-3 rounded-2xl">立即同步</button>
-                  </div>
                 </div>
             </div>
 
-            <!-- Categories Tab (Full Link Manager Parity) -->
+            <!-- Categories Tab -->
             <div id="tab-cats" class="tab-content mx-auto max-w-5xl">
                 <div class="flex items-center justify-between mb-12">
-                    <div><h2 class="text-4xl font-black mb-2">分类与链接管理</h2><p class="text-slate-400 font-medium">拖拽排序与实时编辑功能即将上线，目前支持物理排序和管理。</p></div>
+                    <div><h2 class="text-4xl font-black mb-2">分类与链接管理</h2><p class="text-slate-400 font-medium">支持排序、编辑、删除操作</p></div>
                     <div class="flex gap-4">
                         <button onclick="addCategory()" class="bg-slate-900 text-white font-black px-8 py-4 rounded-2xl shadow-xl">添加分类</button>
                         <button onclick="saveCategories()" class="bg-blue-600 text-white font-black px-8 py-4 rounded-2xl shadow-xl">保存所有更改</button>
                     </div>
                 </div>
-                <div id="categoryContainer" class="space-y-8">
-                    <!-- Dynamic Content -->
-                </div>
+                <div id="categoryContainer" class="space-y-8"></div>
             </div>
         </main>
     </div>
 
-    <!-- Modals (Simple) -->
-    <div id="modal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-        <div id="modalBody" class="bg-white p-12 rounded-[3rem] shadow-2xl w-full max-w-xl"></div>
-    </div>
-
     <script>
         let appData = {
-          settings: ${JSON.stringify(settings)},
-          categories: ${JSON.stringify(categories)}
+            settings: ${JSON.stringify(settings)},
+            categories: ${JSON.stringify(categories)}
         };
 
         function switchTab(t) {
@@ -333,13 +503,11 @@ async function renderAdmin(ctx) {
             if(t === 'cats') renderCategories();
         }
 
-        /* --- Settings Actions --- */
         async function saveGlobalSettings() {
             appData.settings = {
                 title: document.getElementById('s-title').value,
                 logo: document.getElementById('s-logo').value,
                 appearanceMode: document.getElementById('s-appearance').value,
-                theme: document.getElementById('s-theme').value,
                 copyright: document.getElementById('s-copy').value,
                 searchEnabled: document.getElementById('s-search').checked
             };
@@ -347,20 +515,10 @@ async function renderAdmin(ctx) {
             if(res.ok) alert('✅ 网站设置已成功保存！');
         }
 
-        async function syncData() {
-          if(!confirm('是否从 migration-data.json 覆盖当前数据？')) return;
-          const res = await fetch('/migration-data.json');
-          if(!res.ok) return alert('未找到迁移文件');
-          const data = await res.json();
-          const seed = await fetch('/api/seed', { method: 'POST', body: JSON.stringify(data) });
-          if(seed.ok) { alert('同步成功！'); location.reload(); }
-        }
-
-        /* --- Category & Link Logic --- */
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
-            container.innerHTML = appData.categories.sort((a,b)=>a.sortOrder-b.sortOrder).map((c, i) => \`
-                <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden group">
+            container.innerHTML = appData.categories.sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)).map((c, i) => \`
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden">
                     <div class="p-8 flex items-center justify-between bg-slate-50/50">
                         <div class="flex items-center gap-4">
                             <span class="text-slate-300 font-black text-2xl">#\${i+1}</span>
@@ -375,7 +533,7 @@ async function renderAdmin(ctx) {
                     </div>
                     <div class="p-8 space-y-4">
                         <div class="grid grid-cols-1 gap-4">
-                            \${c.links.sort((a,b)=>a.sortOrder-b.sortOrder).map((l, li) => \`
+                            \${(c.links||[]).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)).map((l, li) => \`
                                 <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
                                     <div class="flex items-center gap-4 overflow-hidden">
                                         <img src="\${l.logoUrl}" class="w-10 h-10 rounded-lg bg-white border object-contain">
@@ -390,7 +548,7 @@ async function renderAdmin(ctx) {
                                 </div>
                             \`).join('')}
                         </div>
-                        <button onclick="addLink(\${i})" class="w-full dashed border-2 border-dashed border-slate-200 p-4 rounded-2xl text-slate-400 font-bold hover:border-blue-400 hover:text-blue-500 transition-all">+ 新增链接</button>
+                        <button onclick="addLink(\${i})" class="w-full border-2 border-dashed border-slate-200 p-4 rounded-2xl text-slate-400 font-bold hover:border-blue-400 hover:text-blue-500 transition-all">+ 新增链接</button>
                     </div>
                 </div>
             \`).join('');
@@ -401,22 +559,21 @@ async function renderAdmin(ctx) {
             if(res.ok) alert('✅ 所有内容更改已保存！');
         }
 
-        // Add/Move/Delete Helpers
         function moveCat(i, d) {
-          const target = i + d;
-          if(target < 0 || target >= appData.categories.length) return;
-          [appData.categories[i], appData.categories[target]] = [appData.categories[target], appData.categories[i]];
-          appData.categories.forEach((c, idx) => c.sortOrder = idx);
-          renderCategories();
+            const target = i + d;
+            if(target < 0 || target >= appData.categories.length) return;
+            [appData.categories[i], appData.categories[target]] = [appData.categories[target], appData.categories[i]];
+            appData.categories.forEach((c, idx) => c.sortOrder = idx);
+            renderCategories();
         }
 
         function moveLink(ci, li, d) {
-          const links = appData.categories[ci].links;
-          const target = li + d;
-          if(target < 0 || target >= links.length) return;
-          [links[li], links[target]] = [links[target], links[li]];
-          links.forEach((l, idx) => l.sortOrder = idx);
-          renderCategories();
+            const links = appData.categories[ci].links || [];
+            const target = li + d;
+            if(target < 0 || target >= links.length) return;
+            [links[li], links[target]] = [links[target], links[li]];
+            links.forEach((l, idx) => l.sortOrder = idx);
+            renderCategories();
         }
 
         function addCategory() {
@@ -435,6 +592,7 @@ async function renderAdmin(ctx) {
             const desc = prompt('描述:');
             const logo = prompt('Logo URL:');
             if(name && url) {
+                if(!appData.categories[ci].links) appData.categories[ci].links = [];
                 appData.categories[ci].links.push({ id: Date.now().toString(), name, url, description: desc, logoUrl: logo, sortOrder: appData.categories[ci].links.length });
                 renderCategories();
             }
