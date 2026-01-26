@@ -27,8 +27,9 @@ export default function RootLayout({
       <body className="font-body antialiased min-h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="galaxy"
+          enableSystem={false}
+          themes={['mint', 'lavender', 'lemon', 'candy', 'ocean', 'galaxy', 'midnight']}
           disableTransitionOnChange
         >
           {children}

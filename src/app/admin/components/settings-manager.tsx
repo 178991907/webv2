@@ -14,13 +14,7 @@ import { saveSettings } from "@/lib/actions";
 import { Download, Upload, Database, AlertTriangle, Loader2, Palette, Check, Monitor } from 'lucide-react';
 import { exportData, importData, syncFromRemoteDb, type ExportData } from '@/lib/actions-sync';
 
-const APPEARANCES = [
-  { id: 'light', name: '系统亮色', color: 'bg-white border-gray-200' },
-  { id: 'dark', name: '系统暗色', color: 'bg-gray-900 border-gray-800' },
-  { id: 'glass', name: '玻璃拟态', color: 'bg-blue-200/50 backdrop-blur-md border-blue-300' },
-  { id: 'paper', name: '柔和纸张', color: 'bg-[#f5f2e9] border-[#e0d9c0]' },
-  { id: 'minimal', name: '极简专业', color: 'bg-white border-black' },
-];
+import { THEME_MODES } from "@/lib/constants";
 
 const THEMES = [
   { id: 'theme-blue', name: 'Modern Blue', color: 'bg-[#3b82f6]' },
@@ -111,23 +105,29 @@ export function SettingsManager({ initialSettings }: { initialSettings: Settings
             <div className="space-y-4">
               <Label className="flex items-center gap-2">
                 <Monitor className="h-4 w-4" />
-                外观风格 (独立于配色)
+                默认主题 (Global Default)
               </Label>
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                {APPEARANCES.map((a) => (
+              <p className="text-sm text-muted-foreground mb-2">
+                设置新用户访问时看到的默认主题。访客可以自行切换主题（仅本地保存）。
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {THEME_MODES.map((mode) => (
                   <button
-                    key={a.id}
+                    key={mode.id}
                     type="button"
-                    onClick={() => setSettings(prev => ({ ...prev, appearanceMode: a.id }))}
-                    className={`group relative flex flex-col items-center gap-2 p-2.5 rounded-xl border-2 transition-all ${settings.appearanceMode === a.id
+                    onClick={() => setSettings(prev => ({ ...prev, appearanceMode: mode.id }))}
+                    className={`group relative flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all text-left ${settings.appearanceMode === mode.id
                       ? 'border-primary bg-primary/5'
                       : 'border-transparent hover:border-muted-foreground/20 bg-muted/30'
                       }`}
                   >
-                    <div className={`h-10 w-full rounded-lg shadow-sm border ${a.color} flex items-center justify-center`}>
-                      {settings.appearanceMode === a.id && <Check className="h-4 w-4 text-primary" />}
+                    <div className={`h-12 w-full rounded-lg shadow-sm border ${mode.color} flex items-center justify-center`}>
+                      {settings.appearanceMode === mode.id && <Check className="h-5 w-5 text-white drop-shadow-md" />}
                     </div>
-                    <span className="text-[10px] font-medium text-center leading-tight">{a.name}</span>
+                    <div className="w-full">
+                      <div className="text-xs font-bold leading-tight mb-0.5">{mode.name}</div>
+                      <div className="text-[10px] text-muted-foreground truncate">{mode.nameEn}</div>
+                    </div>
                   </button>
                 ))}
               </div>

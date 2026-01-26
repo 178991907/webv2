@@ -8,127 +8,54 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 6% 10%;
-    --card: 240 5% 97%;
-    --card-foreground: 240 6% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 6% 10%;
-    --primary: 220 90% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 5% 90%;
-    --secondary-foreground: 240 6% 10%;
-    --muted: 240 5% 95%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 240 5% 90%;
-    --accent-foreground: 240 6% 10%;
+    /* Default to Galaxy Explorer Theme */
+    --background: 265 48% 10%;
+    /* #1e1b4b - Dark Blue */
+    --foreground: 210 40% 98%;
+    /* #f8fafc - Off White */
+    --card: 265 48% 13%;
+    /* Slightly lighter dark */
+    --card-foreground: 210 40% 98%;
+    --popover: 265 48% 13%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 265 89% 78%;
+    /* #d8b4fe - Neon Purple */
+    --primary-foreground: 265 48% 10%;
+    --secondary: 280 65% 25%;
+    /* Dark Purple */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 265 48% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 180 100% 65%;
+    /* #5eead4 - Neon Cyan */
+    --accent-foreground: 265 48% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5% 92%;
-    --input: 240 5% 92%;
-    --ring: 220 90% 60%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --section-bg: 240 5% 94%;
-    --icon-bg: 240 5% 90%;
+    --border: 265 48% 25%;
+    --input: 265 48% 25%;
+    --ring: 265 89% 78%;
+    --radius: 1.5rem;
+    --section-bg: 265 48% 8%;
+    /* Very dark for sections */
+    --icon-bg: 265 48% 18%;
 
-    /* Gradient Color Variables */
-    --brand-grad-1-start: 270 70% 50%;
-    --brand-grad-1-mid: 330 80% 60%;
-    --brand-grad-1-end: 0 100% 50%;
+    /* Brand gradients - Neon glow (Default) */
+    --brand-grad-1-start: 265 89% 78%;
+    --brand-grad-1-mid: 280 80% 60%;
+    --brand-grad-1-end: 180 100% 65%;
 
-    --brand-grad-2-start: 200 100% 50%;
-    --brand-grad-2-mid: 150 100% 40%;
-    --brand-grad-2-end: 50 100% 50%;
+    --brand-grad-2-start: 214 100% 65%;
+    --brand-grad-2-mid: 204 100% 86%;
+    --brand-grad-2-end: 42 100% 70%;
+
+    --brand-grad-2-start: 214 100% 65%;
+    --brand-grad-2-mid: 204 100% 86%;
+    --brand-grad-2-end: 42 100% 70%;
   }
 
+  /* Force brightness regardless of .dark class */
   .dark {
-    --background: 240 6% 8%;
-    --foreground: 0 0% 98%;
-    --card: 240 4% 12%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 6% 8%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 220 90% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 15%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 15%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 15%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
-    --ring: 220 90% 60%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --section-bg: 240 4% 14%;
-    --icon-bg: 240 4% 18%;
-  }
-
-  .theme-blue {
-    --primary: 220 90% 60%;
-    --ring: 220 90% 60%;
-    --brand-grad-1-start: 220 90% 60%;
-    --brand-grad-1-mid: 260 70% 60%;
-    --brand-grad-1-end: 280 80% 50%;
-  }
-
-  .theme-green {
-    --primary: 160 100% 30%;
-    --primary-foreground: 160 100% 95%;
-    --ring: 160 100% 30%;
-    --brand-grad-1-start: 140 100% 30%;
-    --brand-grad-1-mid: 160 80% 40%;
-    --brand-grad-1-end: 180 100% 30%;
-    --brand-grad-2-start: 140 100% 40%;
-    --brand-grad-2-mid: 120 100% 40%;
-    --brand-grad-2-end: 100 100% 40%;
-  }
-
-  .theme-purple {
-    --primary: 270 70% 50%;
-    --primary-foreground: 270 70% 95%;
-    --ring: 270 70% 50%;
-    --brand-grad-1-start: 270 70% 50%;
-    --brand-grad-1-mid: 290 80% 60%;
-    --brand-grad-1-end: 320 100% 50%;
-  }
-
-  .theme-orange {
-    --primary: 30 100% 50%;
-    --primary-foreground: 30 100% 95%;
-    --ring: 30 100% 50%;
-    --brand-grad-1-start: 20 100% 50%;
-    --brand-grad-1-mid: 40 100% 50%;
-    --brand-grad-1-end: 60 100% 50%;
-  }
-
-  .theme-pink {
-    --primary: 346 77% 50%;
-    --primary-foreground: 346 77% 95%;
-    --ring: 346 77% 50%;
-    --brand-grad-1-start: 330 80% 50%;
-    --brand-grad-1-mid: 346 77% 60%;
-    --brand-grad-1-end: 360 100% 50%;
-  }
-
-  .theme-slate {
-    --primary: 220 15% 30%;
-    --primary-foreground: 220 15% 95%;
-    --ring: 220 15% 30%;
-    --brand-grad-1-start: 220 15% 30%;
-    --brand-grad-1-mid: 220 10% 45%;
-    --brand-grad-1-end: 220 5% 60%;
+    color-scheme: light;
   }
 }
 
@@ -141,73 +68,372 @@ body {
     @apply bg-background text-foreground transition-colors duration-300;
   }
 
-  /* Appearance Modes */
+  /* ============================================
+     CHILD-FRIENDLY THEME SYSTEM (Refactored)
+     5 Bright & Friendly Schemes for children
+     ============================================ */
 
-  /* Glassmorphism */
-  .appearance-glass {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 100% / 0.05;
-    --card-foreground: 0 0% 100%;
-    --border: 0 0% 100% / 0.1;
-    --section-bg: 0 0% 0% / 0.2;
-    background: radial-gradient(circle at top left, hsl(240 10% 15%), hsl(240 10% 5%));
-    background-attachment: fixed;
-  }
-
-  .appearance-glass .bg-card {
-    @apply backdrop-blur-xl bg-white/5 border-white/10 shadow-2xl;
-  }
-
-  .appearance-glass .bg-background\/95 {
-    @apply bg-black/40 backdrop-blur-md border-b border-white/5;
-  }
-
-  /* Soft Paper */
-  .appearance-paper {
-    --background: 35 30% 92%;
-    --foreground: 20 20% 20%;
-    --card: 35 30% 96%;
-    --card-foreground: 20 20% 25%;
-    --border: 35 20% 85%;
-    --muted: 35 10% 88%;
-    --muted-foreground: 20 10% 45%;
-    --section-bg: 35 20% 88%;
-    --icon-bg: 35 15% 82%;
-  }
-
-  .appearance-paper .bg-card {
-    @apply shadow-sm border-orange-200/50;
-  }
-
-  /* Minimal Pro */
-  .appearance-minimal {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+  /* Theme 1: 薄荷清新 (Mint Fresh) */
+  .mint {
+    --background: 200 60% 98%;
+    /* #F8FBFD */
+    --foreground: 218 23% 23%;
+    /* #2D3748 */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
-    --border: 0 0% 90%;
-    --radius: 0;
-    --section-bg: 0 0% 98%;
-    --icon-bg: 0 0% 95%;
+    /* #FFFFFF */
+    --card-foreground: 218 23% 23%;
+    --primary: 176 56% 55%;
+    /* #4ECDC4 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 168 52% 71%;
+    /* #95E1D3 */
+    --secondary-foreground: 176 56% 20%;
+    --accent: 0 100% 71%;
+    /* #FF6B6B */
+    --accent-foreground: 0 0% 100%;
+    --border: 176 56% 90%;
+    --ring: 176 56% 55%;
+    --section-bg: 195 40% 97%;
+    /* Brand gradients */
+    --brand-grad-1-start: 176 56% 55%;
+    --brand-grad-1-mid: 168 52% 71%;
+    --brand-grad-1-end: 0 100% 71%;
   }
 
-  .appearance-minimal .bg-card {
-    @apply rounded-none border shadow-none hover:border-black transition-colors;
+  /* Theme 2: 薰衣草梦幻 (Lavender Dream) */
+  .lavender {
+    --background: 255 100% 99%;
+    /* #FCFBFF */
+    --foreground: 247 17% 22%;
+    /* #2F2E41 */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 247 17% 22%;
+    --primary: 255 92% 76%;
+    /* #A78BFA */
+    --primary-foreground: 255 40% 20%;
+    --secondary: 261 88% 86%;
+    /* #D6BCFA */
+    --secondary-foreground: 255 40% 25%;
+    --accent: 329 86% 70%;
+    /* #F472B6 */
+    --accent-foreground: 0 0% 100%;
+    --border: 255 92% 92%;
+    --ring: 255 92% 76%;
+    --section-bg: 260 50% 98%;
+    /* Brand gradients */
+    --brand-grad-1-start: 255 92% 76%;
+    --brand-grad-1-mid: 261 88% 86%;
+    --brand-grad-1-end: 329 86% 70%;
   }
 
-  .appearance-minimal .rounded-xl,
-  .appearance-minimal .rounded-2xl {
-    @apply rounded-none;
+  /* Theme 3: 阳光柠檬派 (Sunny Lemon Pie) */
+  .lemon {
+    --background: 45 100% 97%;
+    /* #FFFBF0 */
+    --foreground: 30 35% 18%;
+    /* #3F2E1E */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 30 35% 18%;
+    --primary: 45 96% 64%;
+    /* #FCD34D */
+    --primary-foreground: 30 40% 15%;
+    --secondary: 47 94% 89%;
+    /* #FEF3C7 */
+    --secondary-foreground: 30 35% 20%;
+    --accent: 25 95% 53%;
+    /* #F97316 */
+    --accent-foreground: 0 0% 100%;
+    --border: 45 96% 90%;
+    --ring: 45 96% 64%;
+    --section-bg: 45 60% 95%;
+    /* Brand gradients */
+    --brand-grad-1-start: 45 96% 64%;
+    --brand-grad-1-mid: 47 94% 89%;
+    --brand-grad-1-end: 25 95% 53%;
   }
 
-  .dark .appearance-minimal {
+  /* Theme 4: 棉花糖乐园 (Cotton Candy Park) */
+  .candy {
+    --background: 333 60% 98%;
+    /* #FEF5F9 */
+    --foreground: 325 25% 23%;
+    /* #4A2C3F */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 325 25% 23%;
+    --primary: 329 81% 81%;
+    /* #F9A8D4 */
+    --primary-foreground: 325 40% 20%;
+    --secondary: 295 44% 82%;
+    /* #E0BBE4 */
+    --secondary-foreground: 325 25% 25%;
+    --accent: 140 46% 72%;
+    /* #98D8AA */
+    --accent-foreground: 140 40% 20%;
+    --border: 329 81% 92%;
+    --ring: 329 81% 81%;
+    --section-bg: 330 40% 97%;
+    /* Brand gradients */
+    --brand-grad-1-start: 329 81% 81%;
+    --brand-grad-1-mid: 295 44% 82%;
+    --brand-grad-1-end: 140 46% 72%;
+  }
+
+  /* Theme 5: 海洋探险 (Ocean Adventure) */
+  .ocean {
+    --background: 204 100% 97%;
+    /* #F0F9FF */
+    --foreground: 213 52% 25%;
+    /* #1E3A5F */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 213 52% 25%;
+    --primary: 214 100% 65%;
+    /* #4C9BFF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 204 100% 86%;
+    /* #A5D8FF */
+    --secondary-foreground: 213 52% 20%;
+    --accent: 42 100% 70%;
+    /* #FFD166 */
+    --accent-foreground: 42 60% 20%;
+    --border: 214 100% 90%;
+    --ring: 214 100% 65%;
+    --section-bg: 204 60% 95%;
+    /* Brand gradients */
+    --brand-grad-1-start: 214 100% 65%;
+    --brand-grad-1-mid: 204 100% 86%;
+    --brand-grad-1-end: 42 100% 70%;
+  }
+
+  /* Theme 6: 银河探索 (Galaxy Explorer - Dark Mode) */
+  .galaxy {
+    --background: 265 48% 10%;
+    /* #1e1b4b - Dark Blue */
+    --foreground: 210 40% 98%;
+    /* #f8fafc - Off White */
+    --card: 265 48% 13%;
+    /* Slightly lighter dark */
+    --card-foreground: 210 40% 98%;
+    --primary: 265 89% 78%;
+    /* #d8b4fe - Neon Purple */
+    --primary-foreground: 265 48% 10%;
+    --secondary: 280 65% 25%;
+    /* Dark Purple */
+    --secondary-foreground: 210 40% 98%;
+    --accent: 180 100% 65%;
+    /* #5eead4 - Neon Cyan */
+    --accent-foreground: 265 48% 10%;
+    --muted: 265 48% 15%;
+    --muted-foreground: 215 20% 65%;
+    --border: 265 48% 25%;
+    --input: 265 48% 25%;
+    --ring: 265 89% 78%;
+    --section-bg: 265 48% 8%;
+    /* Very dark for sections */
+
+    /* Brand gradients - Neon glow */
+    --brand-grad-1-start: 265 89% 78%;
+    --brand-grad-1-mid: 280 80% 60%;
+    --brand-grad-1-end: 180 100% 65%;
+  }
+
+  /* Theme 7: 极致纯黑 (Pure Midnight - True Black) */
+  .midnight {
     --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 0%;
-    --border: 0 0% 20%;
-    --section-bg: 0 0% 5%;
+    /* #000000 - True Black */
+    --foreground: 210 40% 98%;
+    /* #f8fafc - Off White */
+    --card: 240 10% 3.9%;
+    /* #09090b - Zinc 950 */
+    --card-foreground: 210 40% 98%;
+    --primary: 0 0% 100%;
+    /* #ffffff - White */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 240 3.7% 15.9%;
+    /* #27272a - Zinc 800 */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 0 0% 100%;
+    /* White accent */
+    --accent-foreground: 0 0% 0%;
+    --border: 240 3.7% 15.9%;
+    /* Zinc 800 */
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --section-bg: 0 0% 2%;
+    /* Near black for sections */
+
+    /* Brand gradients - Monochrome */
+    --brand-grad-1-start: 0 0% 100%;
+    --brand-grad-1-mid: 0 0% 80%;
+    --brand-grad-1-end: 0 0% 60%;
   }
+
+  /* ============================================
+   DISTINCT COMPONENT STYLES PER THEME
+   ============================================ */
+
+  /* 1. MINT FRESH: Balanced, Clean, Friendly */
+  .mint .theme-card {
+    @apply rounded-xl border border-border/50;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  .mint .theme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(78, 205, 196, 0.2), 0 4px 6px -2px rgba(78, 205, 196, 0.1);
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
+  .mint .theme-section {
+    @apply rounded-2xl;
+    border: 1px dashed hsl(var(--border));
+  }
+
+  /* 2. LAVENDER DREAM: Glassmorphism, Soft, Blurry */
+  .lavender .theme-card {
+    @apply rounded-2xl border border-white/40;
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    transition: all 0.4s ease;
+  }
+
+  .lavender .theme-card:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    transform: scale(1.02);
+    box-shadow: 0 8px 32px 0 rgba(167, 139, 250, 0.2);
+  }
+
+  .lavender .theme-section {
+    @apply rounded-[2rem];
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  /* 3. SUNNY LEMON: Bold, Pop, "Sticker" feel */
+  .lemon .theme-card {
+    @apply rounded-lg border-2 border-primary/20;
+    box-shadow: 4px 4px 0px 0px hsl(var(--secondary));
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .lemon .theme-card:hover {
+    transform: translate(-2px, -2px);
+    border-color: hsl(var(--primary));
+    box-shadow: 6px 6px 0px 0px hsl(var(--primary));
+  }
+
+  .lemon .theme-section {
+    @apply rounded-xl border-2 border-dashed border-primary/30;
+    background-color: hsl(45 60% 98%) !important;
+  }
+
+  /* 4. COTTON CANDY: Soft, Pill-shaped, Fluffy */
+  .candy .theme-card {
+    @apply rounded-[2rem] border-none;
+    box-shadow: 0 10px 25px -5px rgba(249, 168, 212, 0.3);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .candy .theme-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 20px 35px -5px rgba(249, 168, 212, 0.5);
+  }
+
+  .candy .theme-section {
+    @apply rounded-[3rem];
+    box-shadow: inset 0 0 20px rgba(249, 168, 212, 0.1);
+  }
+
+  /* 5. OCEAN ADVENTURE: Fluid, Asymmetric, Floating */
+  .ocean .theme-card {
+    @apply rounded-tr-[2rem] rounded-bl-[2rem] rounded-tl-lg rounded-br-lg border border-primary/20;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.8)) !important;
+    box-shadow: 0 4px 15px rgba(76, 155, 255, 0.1);
+    transition: all 0.5s ease-in-out;
+  }
+
+  .ocean .theme-card:hover {
+    @apply rounded-tr-lg rounded-bl-lg rounded-tl-[2rem] rounded-br-[2rem];
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(76, 155, 255, 0.2);
+    border-color: hsl(var(--primary));
+  }
+
+  .ocean .theme-section {
+    @apply rounded-[2rem];
+    background: linear-gradient(180deg, hsl(204 60% 97%), hsl(204 60% 95%)) !important;
+    border-top: 4px solid hsl(var(--primary) / 0.2);
+  }
+
+  /* 6. GALAXY EXPLORER: Dark, Neon Glow, High Contrast */
+  .galaxy .theme-card {
+    @apply rounded-xl border border-primary/20;
+    background: rgba(30, 27, 75, 0.6) !important;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .galaxy .theme-card:hover {
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 25px rgba(94, 234, 212, 0.4), inset 0 0 10px rgba(94, 234, 212, 0.1);
+    transform: scale(1.02);
+  }
+
+  .galaxy .theme-section {
+    @apply rounded-2xl;
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  /* 7. PURE MIDNIGHT: Minimalist, True Dark, No Distractions */
+  .midnight .theme-card {
+    @apply rounded-xl border border-zinc-800;
+    background: hsl(240 10% 3.9%) !important;
+    box-shadow: none;
+    transition: all 0.2s ease;
+  }
+
+  .midnight .theme-card:hover {
+    border-color: hsl(240 5% 64.9%);
+    transform: translateY(-2px);
+    background: hsl(240 5% 6%) !important;
+  }
+
+  .midnight .theme-section {
+    @apply rounded-xl;
+    background: hsl(0 0% 2%) !important;
+    border: 1px solid hsl(240 3.7% 15.9%);
+  }
+
+  .midnight .theme-logo {
+    filter: invert(1) brightness(1.2);
+  }
+
+  .galaxy body {
+    background-image:
+      radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px),
+      radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 2px),
+      radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+  }
+
+  .galaxy .theme-logo {
+    filter: invert(1) brightness(1.5) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  }
+
+  /* Old theme code has been removed - using new child-friendly themes above */
+
+
 }
 
 @layer utilities {
@@ -229,4 +455,124 @@ body {
       background-position: 0% 50%;
     }
   }
+
+  /* Float animation for hover effects */
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Shimmer effect for premium cards */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Glow pulse for accents */
+  @keyframes glow-pulse {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(var(--primary), 0.2);
+    }
+
+    50% {
+      box-shadow: 0 0 40px rgba(var(--primary), 0.4);
+    }
+  }
+
+  .animate-glow {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* Subtle scale on hover */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Premium card styles */
+  .card-premium {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .card-premium:hover::before {
+    left: 100%;
+  }
+
+}
+
+/* =======================================
+   LAYOUT-SHIFT SPOTLIGHT EFFECT (Galaxy/Midnight)
+   ======================================= */
+/* 
+   When hovering a card:
+   1. Add margin-right to the flex item (.group) to create physical space.
+   2. Radix Tooltip (side="right") will position itself relative to the element, effectively filling this margin.
+*/
+
+/* The Flex Item (Anchor tag) handles the layout space */
+.link-grid-container .group {
+  transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: margin-right;
+}
+
+.link-grid-container .group:hover {
+  /* Create space for the tooltip */
+  margin-right: 230px;
+  z-index: 20;
+  position: relative;
+}
+
+/* The Visual Card handles the cosmetic pop */
+.link-grid-container .group:hover .theme-card {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Dim neighbors */
+.link-grid-container:has(.group:hover) .group:not(:hover) .theme-card {
+  transform: scale(0.95);
+  opacity: 0.5;
+  filter: blur(1px) grayscale(30%);
+  transition: all 0.4s ease;
 }

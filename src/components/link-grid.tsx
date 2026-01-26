@@ -4,20 +4,21 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import type { Category, LinkItem } from "@/lib/types";
 import { Input } from "@/components/ui/input";
-import { Globe, ChevronDown, ChevronUp } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Globe, ChevronDown, ChevronUp, Star, BookOpen, Zap, Palette, Wrench, Folder, type LucideIcon } from "lucide-react";
 
-// 分类图标映射
-const categoryIcons: Record<string, string> = {
-  "常用网站": "⭐",
-  "学习资源": "📚",
-  "开发工具": "⚡",
-  "设计资源": "🎨",
-  "在线工具": "🔧",
+// 分类图标映射 - 使用 Lucide SVG 图标（遵循 ui-ux-pro-max 规范：禁止使用 emoji）
+const categoryIcons: Record<string, LucideIcon> = {
+  "常用网站": Star,
+  "学习资源": BookOpen,
+  "开发工具": Zap,
+  "设计资源": Palette,
+  "在线工具": Wrench,
 };
 
 // 卡片高度（用于计算折叠时的容器高度）
-// 卡片高度约 140px (p-5 + icon 48px + text)
-const CARD_HEIGHT = 150;
+// 卡片高度约 180px (sm) + gap
+const CARD_HEIGHT = 190;
 
 export function LinkGrid({ categories }: { categories: Category[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,7 +68,7 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
         <Input
           type="search"
           placeholder="搜索..."
-          className="w-full pl-4 pr-4 py-6 text-base rounded-lg shadow-sm bg-white dark:bg-card focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="theme-input w-full pl-4 pr-4 py-6 text-base shadow-sm bg-card focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-all duration-300"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -82,7 +83,7 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
             return (
               <section
                 key={category.id}
-                className="rounded-xl p-6 bg-[hsl(var(--section-bg))] relative"
+                className="theme-section p-6 bg-[hsl(var(--section-bg))] relative transition-all duration-300"
               >
                 {/* 展开/收起按钮 - 右上角 */}
                 {hasMoreLinks && (
@@ -99,42 +100,54 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
                 )}
 
                 <h2 className="font-headline text-xl sm:text-2xl font-bold mb-6 flex items-center justify-center gap-2">
-                  <span className="text-2xl">{categoryIcons[category.name] || "📁"}</span>
+                  {(() => {
+                    const IconComponent = categoryIcons[category.name] || Folder;
+                    return <IconComponent className="h-6 w-6 text-primary" />;
+                  })()}
                   {category.name}
                 </h2>
 
                 <div
-                  className={`flex flex-wrap justify-start gap-3 sm:gap-4 transition-all duration-300 ${!isExpanded ? 'overflow-hidden' : ''}`}
+                  className={`link-grid-container flex flex-wrap justify-start gap-3 sm:gap-4 transition-all duration-300 ${!isExpanded ? 'overflow-hidden' : ''}`}
                   style={!isExpanded ? { maxHeight: `${CARD_HEIGHT}px` } : {}}
                 >
                   {category.links.map((link) => (
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group"
-                      key={link.id}
-                    >
-                      <div className="w-[120px] sm:w-[140px] flex flex-col items-center p-4 sm:p-5 rounded-xl bg-card border border-transparent hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 hover:bg-accent/50 transition-all duration-300 cursor-pointer relative overflow-visible">
-                        <div className="w-12 h-12 mb-3 rounded-xl bg-[hsl(var(--icon-bg))] flex items-center justify-center overflow-hidden">
-                          {link.logoUrl ? (
-                            <Image
-                              src={link.logoUrl}
-                              alt={`${link.name} logo`}
-                              width={32}
-                              height={32}
-                              className="object-contain"
-                            />
-                          ) : (
-                            <Globe className="h-6 w-6 text-muted-foreground" />
-                          )}
-                        </div>
-                        <h3 className="font-medium text-sm text-center text-foreground">{link.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1 text-center line-clamp-1 group-hover:line-clamp-none group-hover:block transition-all duration-200">
-                          {link.description}
-                        </p>
-                      </div>
-                    </a>
+                    <TooltipProvider key={link.id}>
+                      <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group block"
+                          >
+                            <div className="theme-card w-[140px] sm:w-[160px] h-[160px] sm:h-[180px] flex flex-col items-center pt-8 sm:pt-8 p-4 sm:p-5 bg-card card-premium cursor-pointer relative overflow-hidden transition-all duration-300">
+                              <div className="w-16 h-16 mb-2 rounded-xl bg-[#2e265c] flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-110 shrink-0">
+                                {link.logoUrl ? (
+                                  <Image
+                                    src={link.logoUrl}
+                                    alt={`${link.name} logo`}
+                                    width={64}
+                                    height={64}
+                                    className="object-contain bg-white w-full h-full"
+                                  />
+                                ) : (
+                                  <Globe className="h-8 w-8 text-white/80 group-hover:text-white transition-colors" />
+                                )}
+                              </div>
+                              <h3 className="font-medium text-sm text-center text-foreground group-hover:text-primary transition-colors mb-1 shrink-0">{link.name}</h3>
+                              <p className="text-xs text-muted-foreground text-center line-clamp-1 group-hover:line-clamp-2 transition-all duration-200">
+                                {link.description}
+                              </p>
+                            </div>
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="max-w-[220px] bg-popover/90 backdrop-blur-md border-primary/20 p-3 shadow-xl z-50">
+                          <p className="font-bold text-sm mb-1 text-primary">{link.name}</p>
+                          <p className="text-xs text-foreground/80 leading-relaxed break-words">{link.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   ))}
                 </div>
               </section>
