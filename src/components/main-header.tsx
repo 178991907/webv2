@@ -21,17 +21,22 @@ export function MainHeader({ settings }: { settings: Settings }) {
         </Button>
       </div>
       <div className="container mx-auto px-4 pt-8 sm:pt-4 relative z-10">
-        <div className="flex justify-center items-center mb-4 sm:mb-6 h-[60px] sm:h-[80px] md:h-[100px]">
+        <div className="flex justify-center items-center mb-6 sm:mb-10 h-[120px] sm:h-[180px] md:h-[240px] transition-all duration-500">
           {settings.logo && (
-            <Image
-              src={settings.logo}
-              alt="Logo"
-              width={600}
-              height={200}
-              sizes="100vw"
-              className="theme-logo object-contain h-full w-auto drop-shadow-lg"
-              priority
-            />
+            <div className="relative group h-full">
+              {/* Logo 光晕背景效果 */}
+              <div className="absolute -inset-4 bg-primary/10 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <Image
+                src={settings.logo}
+                alt="Logo"
+                width={800}
+                height={400}
+                sizes="(max-width: 768px) 200px, 400px"
+                className="theme-logo object-contain h-full w-auto drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 relative z-10"
+                priority
+              />
+            </div>
           )}
         </div>
         <h1
