@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import type { Category, LinkItem } from "@/lib/types";
 import { Input } from "@/components/ui/input";
@@ -20,10 +20,19 @@ const categoryIcons: Record<string, LucideIcon> = {
 // 卡片高度约 180px (sm) + gap
 const CARD_HEIGHT = 190;
 
+// Tooltip 需要的最小右侧空间（tooltip 宽度 220px + margin-right 230px 的安全缓冲）
+const MIN_RIGHT_SPACE = 260;
+
 export function LinkGrid({ categories }: { categories: Category[] }) {
   const [searchTerm, setSearchTerm] = useState("");
   // 存储每个分类的展开状态，key 是分类 ID
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  // 记录当前悬停卡片的信息：ID、Tooltip 方向、是否需要腾空间
+  const [hoveredCard, setHoveredCard] = useState<{
+    id: string;
+    side: "right" | "bottom";
+    canExpand: boolean;
+  } | null>(null);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) {
@@ -59,6 +68,31 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
     // 否则使用后台设置的默认值（isCollapsed 为 true 时默认折叠）
     return !category.isCollapsed;
   };
+
+  // 鼠标进入卡片时：检测右侧可用空间，决定 Tooltip 方向和是否腾空间
+  const handleCardMouseEnter = useCallback((linkId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    const card = e.currentTarget;
+    const container = card.closest('.link-grid-container');
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    // 卡片右边缘到容器右边缘的距离
+    const spaceOnRight = containerRect.right - cardRect.right;
+
+    if (spaceOnRight >= MIN_RIGHT_SPACE) {
+      // 右侧空间充足：腾空间 + Tooltip 右侧显示
+      setHoveredCard({ id: linkId, side: "right", canExpand: true });
+    } else {
+      // 右侧空间不足（行末）：不腾空间 + Tooltip 底部显示
+      setHoveredCard({ id: linkId, side: "bottom", canExpand: false });
+    }
+  }, []);
+
+  // 鼠标离开卡片时：清除状态
+  const handleCardMouseLeave = useCallback(() => {
+    setHoveredCard(null);
+  }, []);
 
   // 折叠时不需要切片，使用 CSS overflow 隐藏
 
@@ -111,44 +145,58 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
                   className={`link-grid-container flex flex-wrap justify-start gap-3 sm:gap-4 transition-all duration-300 ${!isExpanded ? 'overflow-hidden' : ''}`}
                   style={!isExpanded ? { maxHeight: `${CARD_HEIGHT}px` } : {}}
                 >
-                  {category.links.map((link) => (
-                    <TooltipProvider key={link.id}>
-                      <Tooltip delayDuration={300}>
-                        <TooltipTrigger asChild>
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group block"
-                          >
-                            <div className="theme-card w-[140px] sm:w-[160px] h-[160px] sm:h-[180px] flex flex-col items-center pt-8 sm:pt-8 p-4 sm:p-5 bg-card card-premium cursor-pointer relative overflow-hidden transition-all duration-300">
-                              <div className="w-16 h-16 mb-2 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-110 shrink-0">
-                                {link.logoUrl ? (
-                                  <Image
-                                    src={link.logoUrl}
-                                    alt={`${link.name} logo`}
-                                    width={64}
-                                    height={64}
-                                    className="object-contain w-full h-full p-1"
-                                  />
-                                ) : (
-                                  <Globe className="h-8 w-8 text-white/80 group-hover:text-white transition-colors" />
-                                )}
+                  {category.links.map((link) => {
+                    // 判断当前卡片是否处于悬停状态且需要腾空间
+                    const isHovered = hoveredCard?.id === link.id;
+                    const shouldExpand = isHovered && hoveredCard?.canExpand;
+                    const tooltipSide = isHovered ? hoveredCard.side : "right";
+
+                    return (
+                      <TooltipProvider key={link.id}>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`group block ${shouldExpand ? 'expand-right' : ''}`}
+                              onMouseEnter={(e) => handleCardMouseEnter(link.id, e)}
+                              onMouseLeave={handleCardMouseLeave}
+                            >
+                              <div className="theme-card w-[140px] sm:w-[160px] h-[160px] sm:h-[180px] flex flex-col items-center pt-8 sm:pt-8 p-4 sm:p-5 bg-card card-premium cursor-pointer relative overflow-hidden transition-all duration-300">
+                                <div className="w-16 h-16 mb-2 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-110 shrink-0">
+                                  {link.logoUrl ? (
+                                    <Image
+                                      src={link.logoUrl}
+                                      alt={`${link.name} logo`}
+                                      width={64}
+                                      height={64}
+                                      className="object-contain w-full h-full p-1"
+                                    />
+                                  ) : (
+                                    <Globe className="h-8 w-8 text-white/80 group-hover:text-white transition-colors" />
+                                  )}
+                                </div>
+                                <h3 className="font-medium text-sm text-center text-foreground group-hover:text-primary transition-colors mb-1 shrink-0">{link.name}</h3>
+                                <p className="text-xs text-muted-foreground text-center line-clamp-1 group-hover:line-clamp-2 transition-all duration-200">
+                                  {link.description}
+                                </p>
                               </div>
-                              <h3 className="font-medium text-sm text-center text-foreground group-hover:text-primary transition-colors mb-1 shrink-0">{link.name}</h3>
-                              <p className="text-xs text-muted-foreground text-center line-clamp-1 group-hover:line-clamp-2 transition-all duration-200">
-                                {link.description}
-                              </p>
-                            </div>
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-[220px] !bg-[#1e1b4b] backdrop-blur-md !border-white/20 p-3 shadow-xl z-50">
-                          <p className="font-bold text-sm mb-1 !text-white">{link.name}</p>
-                          <p className="text-xs !text-white/90 leading-relaxed break-words">{link.description}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
+                            </a>
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side={tooltipSide}
+                            align="center"
+                            collisionPadding={16}
+                            className="max-w-[220px] !bg-[#1e1b4b] backdrop-blur-md !border-white/20 p-3 shadow-xl z-50"
+                          >
+                            <p className="font-bold text-sm mb-1 !text-white">{link.name}</p>
+                            <p className="text-xs !text-white/90 leading-relaxed break-words">{link.description}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    );
+                  })}
                 </div>
               </section>
             );

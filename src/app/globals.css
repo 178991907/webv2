@@ -542,74 +542,41 @@ body {
 }
 
 /* =======================================
-   LAYOUT-SHIFT SPOTLIGHT EFFECT (Galaxy/Midnight)
+   SPOTLIGHT EFFECT — 智能腾空间 (全主题通用)
    ======================================= */
-/* 
-   When hovering a card:
-   1. Add margin-right to the flex item (.group) to create physical space.
-   2. Radix Tooltip (side="right") will position itself relative to the element, effectively filling this margin.
+/*
+   悬停卡片时：
+   1. JS 检测卡片右侧可用空间，决定 Tooltip 展示方向
+   2. 空间充足：添加 .expand-right 类，margin-right 腾出空间，Tooltip 显示在右侧
+   3. 空间不足（行末）：不添加 margin，Tooltip 改为底部弹出，避免 flex 换行死循环
+   4. margin-right 由 JS 通过类名控制，而非 CSS :hover 直接触发，确保判断先于布局变化
 */
 
-/* The Flex Item (Anchor tag) handles the layout space */
+/* Flex 子项基础过渡 */
 .link-grid-container .group {
   transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: margin-right;
 }
 
+/* 悬停时提升层级 */
 .link-grid-container .group:hover {
-  /* Create space for the tooltip */
-  margin-right: 230px;
   z-index: 20;
   position: relative;
 }
 
-/* The Visual Card handles the cosmetic pop */
+/* JS 判断右侧空间充足时，添加此类来腾出空间 */
+.link-grid-container .group.expand-right {
+  margin-right: 230px;
+}
+
+/* 悬停卡片的视觉放大效果 */
 .link-grid-container .group:hover .theme-card {
   transform: scale(1.05) translateY(-5px);
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
-/* Dim neighbors */
+/* 邻居卡片变暗（柔和淡出） */
 .link-grid-container:has(.group:hover) .group:not(:hover) .theme-card {
   transform: scale(0.95);
   opacity: 0.5;
-  /* Tooltip 样式 - v3.0 优化: 强制暗色模式以确保清晰度 */
   transition: all 0.4s ease;
-}
-
-/* Tooltip 样式 - v3.0 优化: 强制暗色模式以确保清晰度 */
-.card-tooltip {
-  position: absolute;
-  right: -210px;
-  top: 0;
-  width: 200px;
-  background: #1e1b4b;
-  /* 强制使用深色背景 (银河主题色) */
-  color: #ffffff;
-  /* 强制白色文字 */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 1rem;
-  padding: 1rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 50;
-}
-
-.card-tooltip h4 {
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.card-tooltip p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
-
-.card-wrapper:hover .card-tooltip {
-  opacity: 1;
 }
