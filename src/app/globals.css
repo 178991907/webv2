@@ -546,10 +546,13 @@ body {
    ======================================= */
 /*
    悬停卡片时：
-   1. JS 检测卡片右侧可用空间，决定 Tooltip 展示方向
-   2. 空间充足：添加 .expand-right 类，margin-right 腾出空间，Tooltip 显示在右侧
-   3. 空间不足（行末）：不添加 margin，Tooltip 改为底部弹出，避免 flex 换行死循环
-   4. margin-right 由 JS 通过类名控制，而非 CSS :hover 直接触发，确保判断先于布局变化
+   1. JS 检测卡片右侧可用空间，所有 Tooltip 统一从右侧弹出
+   2. 空间充足：添加 .expand-right 类，margin-right 腾出空间
+   3. 空间不足（行末）：同样添加 .expand-right，卡片自动换行到下一行展示
+      — 换行后右侧空间充足，Tooltip 正常显示在右侧
+      — 鼠标不动 4 秒后卡片自动恢复原位
+      — 使用冷却期防止恢复后立即重新触发
+   4. margin-right 由 JS 通过类名控制，而非 CSS :hover 直接触发，杜绝 hover-reflow 死循环
 */
 
 /* Flex 子项基础过渡 */

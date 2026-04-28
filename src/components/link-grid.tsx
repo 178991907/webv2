@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import type { Category, LinkItem } from "@/lib/types";
 import { Input } from "@/components/ui/input";
@@ -17,22 +17,42 @@ const categoryIcons: Record<string, LucideIcon> = {
 };
 
 // 卡片高度（用于计算折叠时的容器高度）
-// 卡片高度约 180px (sm) + gap
 const CARD_HEIGHT = 190;
 
-// Tooltip 需要的最小右侧空间（tooltip 宽度 220px + margin-right 230px 的安全缓冲）
+// Tooltip 需要的最小右侧空间（卡片宽度 160px + margin-right 230px 的安全缓冲）
 const MIN_RIGHT_SPACE = 260;
+
+// 行末卡片自动恢复时间（毫秒）
+const EDGE_AUTO_RESET_MS = 4000;
+
+// 恢复后冷却期（防止卡片回到原位时立即重新触发）
+const COOLDOWN_MS = 800;
 
 export function LinkGrid({ categories }: { categories: Category[] }) {
   const [searchTerm, setSearchTerm] = useState("");
   // 存储每个分类的展开状态，key 是分类 ID
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
-  // 记录当前悬停卡片的信息：ID、Tooltip 方向、是否需要腾空间
+  // 当前悬停的卡片信息
   const [hoveredCard, setHoveredCard] = useState<{
     id: string;
-    side: "right" | "bottom";
-    canExpand: boolean;
+    isEdge: boolean; // 是否是行末卡片（右侧空间不足）
   } | null>(null);
+
+  // 用 ref 存储 hoveredCard 以便在 setTimeout 回调中访问最新值
+  const hoveredCardRef = useRef(hoveredCard);
+  hoveredCardRef.current = hoveredCard;
+
+  // 自动恢复 timer
+  const autoResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // 冷却中的卡片 ID（防止恢复后立即再次触发）
+  const cooldownIdRef = useRef<string | null>(null);
+
+  // 组件卸载时清理 timer
+  useEffect(() => {
+    return () => {
+      if (autoResetTimerRef.current) clearTimeout(autoResetTimerRef.current);
+    };
+  }, []);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) {
@@ -61,40 +81,58 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
 
   // 判断分类是否展开（默认根据 isCollapsed 决定）
   const isCategoryExpanded = (category: Category) => {
-    // 如果用户手动切换过，使用用户的选择
     if (expandedCategories[category.id] !== undefined) {
       return expandedCategories[category.id];
     }
-    // 否则使用后台设置的默认值（isCollapsed 为 true 时默认折叠）
     return !category.isCollapsed;
   };
 
-  // 鼠标进入卡片时：检测右侧可用空间，决定 Tooltip 方向和是否腾空间
+  // 鼠标进入卡片
   const handleCardMouseEnter = useCallback((linkId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    // 冷却期内不处理（防止卡片恢复后立即再次触发循环）
+    if (cooldownIdRef.current === linkId) return;
+
+    // 清除之前的自动恢复 timer
+    if (autoResetTimerRef.current) {
+      clearTimeout(autoResetTimerRef.current);
+      autoResetTimerRef.current = null;
+    }
+
     const card = e.currentTarget;
     const container = card.closest('.link-grid-container');
     if (!container) return;
 
     const containerRect = container.getBoundingClientRect();
     const cardRect = card.getBoundingClientRect();
-    // 卡片右边缘到容器右边缘的距离
     const spaceOnRight = containerRect.right - cardRect.right;
 
-    if (spaceOnRight >= MIN_RIGHT_SPACE) {
-      // 右侧空间充足：腾空间 + Tooltip 右侧显示
-      setHoveredCard({ id: linkId, side: "right", canExpand: true });
+    setHoveredCard({
+      id: linkId,
+      isEdge: spaceOnRight < MIN_RIGHT_SPACE,
+    });
+  }, []);
+
+  // 鼠标离开卡片
+  const handleCardMouseLeave = useCallback(() => {
+    const current = hoveredCardRef.current;
+
+    if (current?.isEdge) {
+      // 行末卡片：延迟自动恢复（卡片已换行，鼠标不在卡片上是正常的）
+      autoResetTimerRef.current = setTimeout(() => {
+        const resetId = hoveredCardRef.current?.id;
+        setHoveredCard(null);
+        autoResetTimerRef.current = null;
+        // 设置冷却期，防止卡片恢复原位后立即再次触发 mouseenter
+        if (resetId) {
+          cooldownIdRef.current = resetId;
+          setTimeout(() => { cooldownIdRef.current = null; }, COOLDOWN_MS);
+        }
+      }, EDGE_AUTO_RESET_MS);
     } else {
-      // 右侧空间不足（行末）：不腾空间 + Tooltip 底部显示
-      setHoveredCard({ id: linkId, side: "bottom", canExpand: false });
+      // 普通卡片：立即清除
+      setHoveredCard(null);
     }
   }, []);
-
-  // 鼠标离开卡片时：清除状态
-  const handleCardMouseLeave = useCallback(() => {
-    setHoveredCard(null);
-  }, []);
-
-  // 折叠时不需要切片，使用 CSS overflow 隐藏
 
   return (
     <div className="space-y-6">
@@ -146,20 +184,21 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
                   style={!isExpanded ? { maxHeight: `${CARD_HEIGHT}px` } : {}}
                 >
                   {category.links.map((link) => {
-                    // 判断当前卡片是否处于悬停状态且需要腾空间
                     const isHovered = hoveredCard?.id === link.id;
-                    const shouldExpand = isHovered && hoveredCard?.canExpand;
-                    const tooltipSide = isHovered ? hoveredCard.side : "right";
+                    const isEdgeHovered = isHovered && hoveredCard?.isEdge;
 
                     return (
                       <TooltipProvider key={link.id}>
-                        <Tooltip delayDuration={300}>
+                        <Tooltip
+                          delayDuration={isEdgeHovered ? 0 : 300}
+                          open={isEdgeHovered ? true : undefined}
+                        >
                           <TooltipTrigger asChild>
                             <a
                               href={link.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`group block ${shouldExpand ? 'expand-right' : ''}`}
+                              className={`group block ${isHovered ? 'expand-right' : ''}`}
                               onMouseEnter={(e) => handleCardMouseEnter(link.id, e)}
                               onMouseLeave={handleCardMouseLeave}
                             >
@@ -185,7 +224,7 @@ export function LinkGrid({ categories }: { categories: Category[] }) {
                             </a>
                           </TooltipTrigger>
                           <TooltipContent
-                            side={tooltipSide}
+                            side="right"
                             align="center"
                             collisionPadding={16}
                             className="max-w-[220px] !bg-[#1e1b4b] backdrop-blur-md !border-white/20 p-3 shadow-xl z-50"
